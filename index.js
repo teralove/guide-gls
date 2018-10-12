@@ -163,7 +163,7 @@ module.exports = function ccGuide(d) {
 				}
 				if (whichboss==3 && ThirdBossActions[skillid]) {
 					sendMessage(ThirdBossActions[skillid].msg);
-					if (skillid === 151 || skillid === 152) {
+					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
 					}
 				}
@@ -292,4 +292,5 @@ module.exports = function ccGuide(d) {
 			gameId: uid_arg2
 		});
 	}
+
 }
