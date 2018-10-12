@@ -1,0 +1,7 @@
+{
+	"disableAutoUpdate": false,
+	"options": {
+		"niceName": "DD-Guide"
+	},
+	"servers": ["https://raw.githubusercontent.com/zc149352394/DD-Guide/master/"]
+}
