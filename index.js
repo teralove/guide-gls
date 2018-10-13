@@ -17,8 +17,10 @@ const FirstBossActions = {
 	312: {msg: '金色花'}
 };
 const SecondBossActions = {
+	105: {msg: '翻滚'},
 	113: {msg: '双手(眩晕)'},
 	114: {msg: '三连地板(靠近)'},
+	116: {msg: '(前砸) (后砸)'},
 	301: {msg: '↑出-旋转(击退)'},
 	302: {msg: '↓进-捶地(击飞)'}
 };
@@ -145,6 +147,7 @@ module.exports = function ccGuide(d) {
 				if (whichboss==2 && SecondBossActions[skillid]) {
 					sendMessage(SecondBossActions[skillid].msg);
 					if (skillid === 114 || skillid === 301 || skillid === 302) {
+						// 2王 内外圈
 						Spawnitem(603, 20, 260);
 						Spawnitem(603, 40, 260);
 						Spawnitem(603, 60, 260);
@@ -163,6 +166,50 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 320, 260);
 						Spawnitem(603, 340, 260);
 						Spawnitem(603, 360, 260);
+					}
+					if (skillid === 116) {
+						// 2王 前后 对横向称轴
+						Spawnitem(603, 90, 25);
+						Spawnitem(603, 90, 50);
+						Spawnitem(603, 90, 75);
+						Spawnitem(603, 90, 100);
+						Spawnitem(603, 90, 125);
+						Spawnitem(603, 90, 150);
+						Spawnitem(603, 90, 175);
+						Spawnitem(603, 90, 200);
+						Spawnitem(603, 90, 225);
+						Spawnitem(603, 90, 250);
+						Spawnitem(603, 90, 275);
+						Spawnitem(603, 90, 300);
+						Spawnitem(603, 90, 325);
+						Spawnitem(603, 90, 350);
+						Spawnitem(603, 90, 375);
+						Spawnitem(603, 90, 400);
+						Spawnitem(603, 90, 425);
+						Spawnitem(603, 90, 450);
+						Spawnitem(603, 90, 475);
+						Spawnitem(603, 90, 500);
+
+						Spawnitem(603, 270, 25);
+						Spawnitem(603, 270, 50);
+						Spawnitem(603, 270, 75);
+						Spawnitem(603, 270, 100);
+						Spawnitem(603, 270, 125);
+						Spawnitem(603, 270, 150);
+						Spawnitem(603, 270, 175);
+						Spawnitem(603, 270, 200);
+						Spawnitem(603, 270, 225);
+						Spawnitem(603, 270, 250);
+						Spawnitem(603, 270, 275);
+						Spawnitem(603, 270, 300);
+						Spawnitem(603, 270, 325);
+						Spawnitem(603, 270, 350);
+						Spawnitem(603, 270, 375);
+						Spawnitem(603, 270, 400);
+						Spawnitem(603, 270, 425);
+						Spawnitem(603, 270, 450);
+						Spawnitem(603, 270, 475);
+						Spawnitem(603, 270, 500);
 					}
 				}
 				if (whichboss==3 && ThirdBossActions[skillid]) {
