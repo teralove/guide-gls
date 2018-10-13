@@ -28,12 +28,12 @@ const ThirdBossActions = {
 	118: {msg: '三连击(左-右-喷)'},
 	143: {msg: '↑左(远) 左后'},
 	145: {msg: '↑左(远) 左后'},
-	146: {msg: '↑左(远) 左后 (左后扩散)', sign_degrees: 240, sign_distance: 300},
-	154: {msg: '↑左(远) 左后 (左后扩散)', sign_degrees: 240, sign_distance: 300},
+	146: {msg: '↑左(远) 左后 (左后扩散)', sign_degrees: 300, sign_distance: 300},
+	154: {msg: '↑左(远) 左后 (左后扩散)', sign_degrees: 300, sign_distance: 300},
 	144: {msg: '↓右(近) 右后'},
 	147: {msg: '↓右(近) 右后'},
-	148: {msg: '↓右(近) 右后 (右后扩散)', sign_degrees: 120, sign_distance: 300},
-	155: {msg: '↓右(近) 右后 (右后扩散)', sign_degrees: 120, sign_distance: 300},
+	148: {msg: '↓右(近) 右后 (右后扩散)', sign_degrees: 60, sign_distance: 300},
+	155: {msg: '↓右(近) 右后 (右后扩散)', sign_degrees: 60, sign_distance: 300},
 	139: {msg: '←顺时针139 (摆头抬脚 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
 	150: {msg: '←顺时针150 (落地直接 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
 	141: {msg: '逆时针141→ (摆头抬脚 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
