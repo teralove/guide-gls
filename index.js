@@ -46,6 +46,7 @@ module.exports = function ccGuide(d) {
 	let	enabled = config.enabled,
 		sendToParty = config.sendToParty,
 		streamenabled = config.streamenabled,
+		msgcolour = config.msgcolour,
 
 		insidemap = false,
 		insidezone = false,
@@ -62,6 +63,7 @@ module.exports = function ccGuide(d) {
 		d.command.message('副本难度: ' + whichmode);
 		d.command.message('副本首领: ' + whichboss);
 		d.command.message('发送通知 ' + (sendToParty ? '组队'.clr('56B4E9') : '自己'.clr('E69F00')));
+		sendMessage('test');
 	})
 	d.command.add('ddg', (arg) => {
 		if (!arg) {
@@ -244,6 +246,10 @@ module.exports = function ccGuide(d) {
 	}
 
 	function sendMessage(msg) {
+		if (msgcolour) {
+			msg = `${msg}`.clr(msgcolour);
+		}
+
 		if (sendToParty) {
 			d.toServer('C_CHAT', 1, {
 				channel: 21, //21 = p-notice, 1 = party, 2 = guild
