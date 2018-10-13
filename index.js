@@ -52,6 +52,7 @@ module.exports = function ccGuide(d) {
 		insidezone = false,
 		whichmode = 0,
 		whichboss = 0,
+		warned = true,
 		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999;
 
 	d.hook('S_LOAD_TOPO', 3, sLoadTopo);
@@ -109,6 +110,7 @@ module.exports = function ccGuide(d) {
 				if (!insidemap) return;
 
 				let bosshp = (event.curHp / event.maxHp);
+
 				if (bosshp <= 0) {
 					whichboss = 0;
 				}
@@ -165,8 +167,8 @@ module.exports = function ccGuide(d) {
 				}
 				if (whichboss==3 && ThirdBossActions[skillid]) {
 					sendMessage(ThirdBossActions[skillid].msg);
+					if (!warned) return;
 					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
-						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
 						// 3王 飞天半屏攻击 对称轴
 						Spawnitem(603, 0, 25);
 						Spawnitem(603, 0, 50);
@@ -209,6 +211,10 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 180, 450);
 						Spawnitem(603, 180, 475);
 						Spawnitem(603, 180, 500);
+						// 3王 飞天半屏攻击 光柱+告示
+						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
+						warned = false;//关闭提示
+						setTimeout(function() { warned = true;}, 5000);//等待5秒开启提示
 					}
 				}
 			}
@@ -243,6 +249,7 @@ module.exports = function ccGuide(d) {
 		insidezone = false;
 		whichmode = 0;
 		whichboss = 0;
+		warned = true;
 	}
 
 	function sendMessage(msg) {
