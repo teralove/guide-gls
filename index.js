@@ -10,7 +10,7 @@ const FirstBossActions = {
 	107: {msg: '后喷(击退)'},
 	109: {msg: '滚石!!'},
 	110: {msg: '滚石!!'},
-	301: {msg: '地刺(眩晕)'},
+	301: {msg: '食人花(眩晕)'},
 	309: {msg: '1朵花-鉴定!!'},
 	310: {msg: '2朵花-鉴定!!'},
 	116: {msg: '全屏'},
@@ -24,7 +24,7 @@ const SecondBossActions = {
 };
 const ThirdBossActions = {
 	118: {msg: '三连击(左-右-喷)'},
-	143: {msg: '↑左(远) 左后'}, // 140 ?
+	143: {msg: '↑左(远) 左后'},
 	145: {msg: '↑左(远) 左后'},
 	146: {msg: '↑左(远) 左后 (左后扩散)'},
 	154: {msg: '↑左(远) 左后 (左后扩散)'},
@@ -32,10 +32,10 @@ const ThirdBossActions = {
 	147: {msg: '↓右(近) 右后'},
 	148: {msg: '↓右(近) 右后 (右后扩散)'},
 	155: {msg: '↓右(近) 右后 (右后扩散)'},
-	139: {msg: '←顺时针139 (摆头抬脚 打右边)', sign_degrees: 270, sign_distance: 200}, //151
-150: {msg: '←顺时针150 (落地直接 打右边)', sign_degrees: 270, sign_distance: 200}, //151
-	141: {msg: '逆时针141→ (摆头抬脚 打左边)', sign_degrees: 90, sign_distance: 200}, //153
-	152: {msg: '逆时针152→ (落地直接 打左边)', sign_degrees: 90, sign_distance: 200}, //153
+	139: {msg: '←顺时针139 (摆头抬脚 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
+//150: {msg: '←顺时针150 (落地直接 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
+	141: {msg: '逆时针141→ (摆头抬脚 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
+	152: {msg: '逆时针152→ (落地直接 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
 	161: {msg: '左-右-左 (后砸) (前砸)'},
 	162: {msg: '左-右-左 (后砸) (前砸)'},
 	300: {msg: '闪避!!'},
@@ -51,7 +51,7 @@ module.exports = function ccGuide(d) {
 		insidezone = false,
 		whichmode = 0,
 		whichboss = 0,
-		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, uid3 = 699999999;
+		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999;
 
 	d.hook('S_LOAD_TOPO', 3, sLoadTopo);
 
@@ -165,7 +165,48 @@ module.exports = function ccGuide(d) {
 					sendMessage(ThirdBossActions[skillid].msg);
 					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
-						lastbossorbs(event, 5000);
+						// 3王 飞天半屏攻击 一字线
+						Spawnitem(603, 0, 25);
+						Spawnitem(603, 0, 50);
+						Spawnitem(603, 0, 75);
+						Spawnitem(603, 0, 100);
+						Spawnitem(603, 0, 125);
+						Spawnitem(603, 0, 150);
+						Spawnitem(603, 0, 175);
+						Spawnitem(603, 0, 200);
+						Spawnitem(603, 0, 225);
+						Spawnitem(603, 0, 250);
+						Spawnitem(603, 0, 275);
+						Spawnitem(603, 0, 300);
+						Spawnitem(603, 0, 325);
+						Spawnitem(603, 0, 350);
+						Spawnitem(603, 0, 375);
+						Spawnitem(603, 0, 400);
+						Spawnitem(603, 0, 425);
+						Spawnitem(603, 0, 450);
+						Spawnitem(603, 0, 475);
+						Spawnitem(603, 0, 500);
+
+						Spawnitem(603, 180, 25);
+						Spawnitem(603, 180, 50);
+						Spawnitem(603, 180, 75);
+						Spawnitem(603, 180, 100);
+						Spawnitem(603, 180, 125);
+						Spawnitem(603, 180, 150);
+						Spawnitem(603, 180, 175);
+						Spawnitem(603, 180, 200);
+						Spawnitem(603, 180, 225);
+						Spawnitem(603, 180, 250);
+						Spawnitem(603, 180, 275);
+						Spawnitem(603, 180, 300);
+						Spawnitem(603, 180, 325);
+						Spawnitem(603, 180, 350);
+						Spawnitem(603, 180, 375);
+						Spawnitem(603, 180, 400);
+						Spawnitem(603, 180, 425);
+						Spawnitem(603, 180, 450);
+						Spawnitem(603, 180, 475);
+						Spawnitem(603, 180, 500);
 					}
 				}
 			}
@@ -219,7 +260,7 @@ module.exports = function ccGuide(d) {
 		}
 	}
 	//二王地面提示(草地圆圈范围)
-	function Spawnitem(item, degrees, radius) { //显示物品 持续时间 偏移角度 半径距离
+	function Spawnitem(item, degrees, radius) { //显示物品 偏移角度 半径距离
 		let r = null, rads = null, finalrad = null, spawnx = null, spawny = null, pos = null;
 
 		r = bossCurAngle - Math.PI;
@@ -292,79 +333,6 @@ module.exports = function ccGuide(d) {
 		d.toClient('S_DESPAWN_DROPITEM', 4, {
 			gameId: uid_arg2
 		});
-	}
-
-	function lastbossorbs(pos, timer) { // 3王 飞天 十字线
-		spawn2(603, timer, 0, 25, pos);
-		spawn2(603, timer, 0, 50, pos);
-		spawn2(603, timer, 0, 75, pos);
-		spawn2(603, timer, 0, 100, pos);
-		spawn2(603, timer, 0, 125, pos);
-		spawn2(603, timer, 0, 150, pos);
-		spawn2(603, timer, 0, 175, pos);
-		spawn2(603, timer, 0, 200, pos);
-		spawn2(603, timer, 0, 225, pos);
-		spawn2(603, timer, 0, 250, pos);
-		spawn2(603, timer, 0, 275, pos);
-		spawn2(603, timer, 0, 300, pos);
-		spawn2(603, timer, 0, 325, pos);
-		spawn2(603, timer, 0, 350, pos);
-		spawn2(603, timer, 0, 375, pos);
-		spawn2(603, timer, 0, 400, pos);
-		spawn2(603, timer, 0, 425, pos);
-		spawn2(603, timer, 0, 450, pos);
-		spawn2(603, timer, 0, 475, pos);
-		spawn2(603, timer, 0, 500, pos);
-
-		spawn2(603, timer, 180, 25, pos);
-		spawn2(603, timer, 180, 50, pos);
-		spawn2(603, timer, 180, 75, pos);
-		spawn2(603, timer, 180, 100, pos);
-		spawn2(603, timer, 180, 125, pos);
-		spawn2(603, timer, 180, 150, pos);
-		spawn2(603, timer, 180, 175, pos);
-		spawn2(603, timer, 180, 200, pos);
-		spawn2(603, timer, 180, 225, pos);
-		spawn2(603, timer, 180, 250, pos);
-		spawn2(603, timer, 180, 275, pos);
-		spawn2(603, timer, 180, 300, pos);
-		spawn2(603, timer, 180, 325, pos);
-		spawn2(603, timer, 180, 350, pos);
-		spawn2(603, timer, 180, 375, pos);
-		spawn2(603, timer, 180, 400, pos);
-		spawn2(603, timer, 180, 425, pos);
-		spawn2(603, timer, 180, 450, pos);
-		spawn2(603, timer, 180, 475, pos);
-		spawn2(603, timer, 180, 500, pos);
-	}
-
-	function spawn2(item, time, degrees, radius, loca) {
-		let r = null,
-			rads = null,
-			finalrad = null,
-			spawnx = null,
-			spawny = null,
-			pos = null;
-
-		r = loca.w;
-		rads = (degrees * Math.PI/180);
-		finalrad = r - rads;
-		spawnx = loca.loc.x + radius * Math.cos(finalrad);
-		spawny = loca.loc.y + radius * Math.sin(finalrad);
-		pos = {x:spawnx,y:spawny};
-
-		d.toClient('S_SPAWN_COLLECTION', 4, {
-			gameId : uid3,
-			id : item,
-			amount : 1,
-			loc : new Vec3(pos.x, pos.y, loca.loc.z),
-			w : r,
-			unk1 : 0,
-			unk2 : 0
-		});
-
-		setTimeout(Despawn, time, uid3)
-		uid3--;
 	}
 
 }
