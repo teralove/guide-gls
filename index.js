@@ -6,7 +6,7 @@ const HuntingZn = [782, 982];
 const BossID = [1000, 2000, 3000];
 
 const FirstBossActions = {
-	106: {msg: '重击(格挡)'},
+	106: {msg: '重击'},
 	107: {msg: '后喷(击退)'},
 	109: {msg: '滚石!!'},
 	110: {msg: '滚石!!'},
@@ -33,7 +33,7 @@ const ThirdBossActions = {
 	148: {msg: '↓右(近) 右后 (右后扩散)'},
 	155: {msg: '↓右(近) 右后 (右后扩散)'},
 	139: {msg: '←顺时针139 (摆头抬脚 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
-//150: {msg: '←顺时针150 (落地直接 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
+	150: {msg: '←顺时针150 (落地直接 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
 	141: {msg: '逆时针141→ (摆头抬脚 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
 	152: {msg: '逆时针152→ (落地直接 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
 	161: {msg: '左-右-左 (后砸) (前砸)'},
@@ -167,7 +167,7 @@ module.exports = function ccGuide(d) {
 					sendMessage(ThirdBossActions[skillid].msg);
 					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
-						// 3王 飞天半屏攻击 一字线
+						// 3王 飞天半屏攻击 对称轴
 						Spawnitem(603, 0, 25);
 						Spawnitem(603, 0, 50);
 						Spawnitem(603, 0, 75);
@@ -265,7 +265,7 @@ module.exports = function ccGuide(d) {
 			});
 		}
 	}
-	//二王地面提示(草地圆圈范围)
+	//二王地面提示(花朵圆圈范围)
 	function Spawnitem(item, degrees, radius) { //显示物品 偏移角度 半径距离
 		let r = null, rads = null, finalrad = null, spawnx = null, spawny = null, pos = null;
 
@@ -290,7 +290,7 @@ module.exports = function ccGuide(d) {
 		uid0--;
 	}
 
-	function Despawn(uid_arg0) { //消除草地
+	function Despawn(uid_arg0) { //消除花朵
 		d.toClient('S_DESPAWN_COLLECTION', 2, {
 			gameId : uid_arg0
 		});
