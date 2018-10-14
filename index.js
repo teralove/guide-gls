@@ -56,7 +56,7 @@ module.exports = function ccGuide(d) {
 		whichmode = 0,
 		whichboss = 0,
 		warned = true,
-		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999;
+		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, power = false, powerNum = 0;
 
 	d.command.add('ddinfo', (arg) => {
 		d.command.message('模块开关: ' + `${enabled}`.clr('00FFFF'));
@@ -127,6 +127,11 @@ module.exports = function ccGuide(d) {
 
 				if (bosshp <= 0) {
 					whichboss = 0;
+				}
+
+				if (event.curHp == event.maxHp) {
+					power = false;
+					powerNum = 0;
 				}
 
 				if (event.huntingZoneId == HuntingZn[0]) {
@@ -229,6 +234,33 @@ module.exports = function ccGuide(d) {
 					}
 				}
 				if (whichboss==3 && ThirdBossActions[skillid]) {
+					if (whichmode==2 && skillid==300) {
+						power = true;
+					}
+					if (power && (
+						skillid==118||
+						skillid==215||
+
+						skillid==143||
+						skillid==145||
+
+						skillid==146||
+						skillid==154||
+
+						skillid==144||
+						skillid==147||
+
+						skillid==148||
+						skillid==155||
+
+						skillid==161||
+						skillid==162))
+					{
+						powerNum++;
+						setTimeout(sendMessage('蓄电 (' + powerNum + ')'), 1000);
+					}
+					if (powerNum>4) powerNum=0;
+
 					if (!isTank && skillid === 118) return; // 打手职业 不提示的技能
 					if ( isTank && (skillid === 143 || skillid === 145 || skillid === 146 || skillid === 154)) return; // 坦克职业 不提示的技能
 					sendMessage(ThirdBossActions[skillid].msg);
@@ -322,6 +354,8 @@ module.exports = function ccGuide(d) {
 		whichmode = 0;
 		whichboss = 0;
 		warned = true;
+		power = false;
+		powerNum = 0;
 	}
 
 	function sendMessage(msg) {
@@ -344,7 +378,7 @@ module.exports = function ccGuide(d) {
 			});
 		}
 	}
-	//二王地面提示(花朵圆圈范围)
+	//地面提示(花朵)
 	function Spawnitem(item, degrees, radius) { //显示物品 偏移角度 半径距离
 		let r = null, rads = null, finalrad = null, spawnx = null, spawny = null, pos = null;
 
@@ -368,13 +402,13 @@ module.exports = function ccGuide(d) {
 		setTimeout(Despawn, 5000, uid0)
 		uid0--;
 	}
-
-	function Despawn(uid_arg0) { //消除花朵
+	//消除花朵
+	function Despawn(uid_arg0) {
 		d.toClient('S_DESPAWN_COLLECTION', 2, {
 			gameId : uid_arg0
 		});
 	}
-	//三王地面提示(光柱+告示牌)
+	//地面提示(光柱+告示牌)
 	function SpawnThing(degrees, radius, times) { //偏移角度 半径距离 持续时间
 		let r = null, rads = null, finalrad = null, pos = null;
 
@@ -409,8 +443,8 @@ module.exports = function ccGuide(d) {
 		});
 		uid2--;
 	}
-
-	function DespawnThing(uid_arg1, uid_arg2) { //消除 光柱+告示牌
+	//消除 光柱+告示牌
+	function DespawnThing(uid_arg1, uid_arg2) {
 		d.toClient('S_DESPAWN_BUILD_OBJECT', 2, {
 			gameId : uid_arg1,
 			unk : 0
