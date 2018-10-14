@@ -50,6 +50,7 @@ module.exports = function ccGuide(d) {
 		streamenabled = config.streamenabled,
 		msgcolour = config.msgcolour,
 
+		isTank = false,
 		insidemap = false,
 		insidezone = false,
 		whichmode = 0,
@@ -57,15 +58,14 @@ module.exports = function ccGuide(d) {
 		warned = true,
 		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999;
 
-	d.hook('S_LOAD_TOPO', 3, sLoadTopo);
-
 	d.command.add('ddinfo', (arg) => {
-		d.command.message('模块开关: '.clr('00FFFF') + enabled);
+		d.command.message('模块开关: ' + `${enabled}`.clr('00FFFF'));
 		d.command.message('副本地图: ' + insidemap);
 		d.command.message('区域位置: ' + insidezone);
 		d.command.message('副本难度: ' + whichmode);
 		d.command.message('副本首领: ' + whichboss);
-		d.command.message('发送通知 ' + (sendToParty ? '组队'.clr('56B4E9') : '自己'.clr('E69F00')));
+		d.command.message('发送通知 ' + (sendToParty ? '真实组队'.clr('56B4E9') : '仅自己见'.clr('E69F00')));
+		d.command.message('职业分类 ' + (isTank ? '坦克'.clr('00FFFF') : '打手'.clr('FF0000')));
 		sendMessage('test');
 	})
 	d.command.add('ddg', (arg) => {
@@ -88,6 +88,18 @@ module.exports = function ccGuide(d) {
 			}
 		}
 	});
+
+	d.hook('S_LOGIN', 10, sLogin)
+	d.hook('S_LOAD_TOPO', 3, sLoadTopo);
+
+	function sLogin(event) {
+		let job = (event.templateId - 10101) % 100;
+		if (job === 1 || job === 10) {
+			isTank = true;
+		} else {
+			isTank = false;
+		}
+	}
 
 	function sLoadTopo(event) {
 		if (event.zone === mapID[0]) {								
@@ -142,10 +154,13 @@ module.exports = function ccGuide(d) {
 				bossCurAngle = event.w;
 
 				if (whichboss==1 && FirstBossActions[skillid]) {
+					if (!isTank && skillid === 106) return; // 打手职业 不提示的技能
+					if ( isTank && skillid === 107) return; // 坦克职业 不提示的技能
 					sendMessage(FirstBossActions[skillid].msg);
 				}
 				if (whichboss==2 && SecondBossActions[skillid]) {
 					sendMessage(SecondBossActions[skillid].msg);
+
 					if (skillid === 114 || skillid === 301 || skillid === 302) {
 						// 2王 内外圈
 						Spawnitem(603, 20, 260);
@@ -167,8 +182,9 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 340, 260);
 						Spawnitem(603, 360, 260);
 					}
+
 					if (skillid === 116) {
-						// 2王 前后 对横向称轴
+						// 2王 前砸后砸 横向对称轴
 						Spawnitem(603, 90, 25);
 						Spawnitem(603, 90, 50);
 						Spawnitem(603, 90, 75);
@@ -212,13 +228,18 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 270, 500);
 					}
 				}
-				if (whichboss==3 && ThirdBossActions[skillid] && warned) {
+				if (whichboss==3 && ThirdBossActions[skillid]) {
+					if (!isTank && skillid === 118) return; // 打手职业 不提示的技能
+					if ( isTank && (skillid === 143 || skillid === 145 || skillid === 146 || skillid === 154)) return; // 坦克职业 不提示的技能
+					sendMessage(ThirdBossActions[skillid].msg);
+
 					if (skillid === 146 || skillid === 154 || skillid === 148 || skillid === 155) {
 						// 3王 左右扩散初始位置
-						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
+						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 8000);
 					}
+
 					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
-						// 3王 飞天半屏攻击 对称轴
+						// 3王 飞天半屏攻击 垂直对称轴
 						Spawnitem(603, 0, 25);
 						Spawnitem(603, 0, 50);
 						Spawnitem(603, 0, 75);
@@ -260,12 +281,13 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 180, 450);
 						Spawnitem(603, 180, 475);
 						Spawnitem(603, 180, 500);
-						// 3王 飞天半屏攻击 光柱+告示
-						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
-						warned = false;//关闭提示
-						setTimeout(function() { warned = true;}, 5000);//等待5秒开启提示
 					}
-					sendMessage(ThirdBossActions[skillid].msg);
+					if (warned && (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152)) {
+						// 3王 飞天半屏攻击 光柱+告示牌
+						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 5000);
+						warned = false; //关闭提示
+						setTimeout(function() { warned = true;}, 5000); //等待5秒开启提示
+					}
 				}
 			}
 
@@ -353,7 +375,7 @@ module.exports = function ccGuide(d) {
 		});
 	}
 	//三王地面提示(光柱+告示牌)
-	function SpawnThing(degrees, radius) { //偏移角度 半径距离
+	function SpawnThing(degrees, radius, times) { //偏移角度 半径距离 持续时间
 		let r = null, rads = null, finalrad = null, pos = null;
 
 		r = bossCurAngle - Math.PI;
@@ -372,7 +394,7 @@ module.exports = function ccGuide(d) {
 			message : '提示区'
 		});
 
-		setTimeout(DespawnThing, 5000, uid1, uid2);
+		setTimeout(DespawnThing, times, uid1, uid2);
 		uid1--;
 
 		bossCurLocation.z = bossCurLocation.z - 100;
@@ -388,7 +410,7 @@ module.exports = function ccGuide(d) {
 		uid2--;
 	}
 
-	function DespawnThing(uid_arg1, uid_arg2) { //消除 光柱+告示
+	function DespawnThing(uid_arg1, uid_arg2) { //消除 光柱+告示牌
 		d.toClient('S_DESPAWN_BUILD_OBJECT', 2, {
 			gameId : uid_arg1,
 			unk : 0
