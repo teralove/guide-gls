@@ -38,8 +38,8 @@ const ThirdBossActions = {
 	150: {msg: '←顺时针150 (落地直接 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
 	141: {msg: '逆时针141→ (摆头抬脚 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
 	152: {msg: '逆时针152→ (落地直接 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
-	161: {msg: '左-右-左 (后砸) (前砸)'},
-	162: {msg: '左-右-左 (后砸) (前砸)'},
+	161: {msg: '(后砸) (前砸)'},
+	162: {msg: '(后砸) (前砸)'},
 	300: {msg: '闪避!!'},
 	360: {msg: '爆炸!!爆炸!!'}
 };
@@ -55,8 +55,7 @@ module.exports = function ccGuide(d) {
 		insidezone = false,
 		whichmode = 0,
 		whichboss = 0,
-		warned = true,
-		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, power = false, powerNum = 0;
+		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, warned = true, power = false, powerNum = 0;
 
 	d.command.add('ddinfo', (arg) => {
 		d.command.message('模块开关: ' + `${enabled}`.clr('00FFFF'));
@@ -130,6 +129,7 @@ module.exports = function ccGuide(d) {
 				}
 
 				if (event.curHp == event.maxHp) {
+					warned = true;
 					power = false;
 					powerNum = 0;
 				}
@@ -234,9 +234,7 @@ module.exports = function ccGuide(d) {
 					}
 				}
 				if (whichboss==3 && ThirdBossActions[skillid]) {
-					if (whichmode==2 && skillid==300) {
-						power = true;
-					}
+					if (whichmode==2 && skillid==300) power = true;
 					if (power && (
 						skillid==118||
 						skillid==215||
@@ -259,19 +257,18 @@ module.exports = function ccGuide(d) {
 						powerNum++;
 						setTimeout(sendMessage('蓄电 (' + powerNum + ')'), 1000);
 					}
+					if (skillid === 118) {
+						power = false; //关闭蓄电计数
+						setTimeout(function() { power = true;}, 4000); //等待4秒开启计数
+					}
 					if (powerNum>4) powerNum=0;
 
-					if (!isTank && skillid === 118) return; // 打手职业 不提示的技能
-					if ( isTank && (skillid === 143 || skillid === 145 || skillid === 146 || skillid === 154)) return; // 坦克职业 不提示的技能
-					sendMessage(ThirdBossActions[skillid].msg);
-
-					if (skillid === 146 || skillid === 154 || skillid === 148 || skillid === 155) {
-						// 3王 左右扩散初始位置
+					if (skillid === 146 || skillid === 154 || skillid === 148 || skillid === 155) { // 3王 左右扩散初始位置
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 8000);
 					}
 
-					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
-						// 3王 飞天半屏攻击 垂直对称轴
+					if (warned && (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152)) { // 3王 飞天半屏攻击
+						//垂直对称轴
 						Spawnitem(603, 0, 25);
 						Spawnitem(603, 0, 50);
 						Spawnitem(603, 0, 75);
@@ -313,13 +310,26 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 180, 450);
 						Spawnitem(603, 180, 475);
 						Spawnitem(603, 180, 500);
-					}
-					if (warned && (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152)) {
-						// 3王 飞天半屏攻击 光柱+告示牌
+						//光柱+告示牌
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 5000);
-						warned = false; //关闭提示
-						setTimeout(function() { warned = true;}, 5000); //等待5秒开启提示
+						warned = false; //关闭地面提示
+						setTimeout(function() { warned = true;}, 4000); //等待4秒开启提示
 					}
+
+					if (!isTank && skillid === 118) return; // 打手职业 不提示的技能
+					if ( isTank && (
+						skillid === 143 ||
+						skillid === 145 ||
+
+						skillid === 146 ||
+						skillid === 154 ||
+
+						skillid === 161 ||
+						skillid === 162)) return; // 坦克职业 不提示的技能
+					if (warned) {
+						sendMessage(ThirdBossActions[skillid].msg);
+					}
+
 				}
 			}
 
