@@ -212,13 +212,11 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 270, 500);
 					}
 				}
-				if (whichboss==3 && ThirdBossActions[skillid]) {
-					sendMessage(ThirdBossActions[skillid].msg);
+				if (whichboss==3 && ThirdBossActions[skillid] && warned) {
 					if (skillid === 146 || skillid === 154 || skillid === 148 || skillid === 155) {
 						// 3王 左右扩散初始位置
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance);
 					}
-					if (!warned) return;
 					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
 						// 3王 飞天半屏攻击 对称轴
 						Spawnitem(603, 0, 25);
@@ -267,6 +265,7 @@ module.exports = function ccGuide(d) {
 						warned = false;//关闭提示
 						setTimeout(function() { warned = true;}, 5000);//等待5秒开启提示
 					}
+					sendMessage(ThirdBossActions[skillid].msg);
 				}
 			}
 
