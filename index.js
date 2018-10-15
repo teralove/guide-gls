@@ -236,7 +236,6 @@ module.exports = function ccGuide(d) {
 					}
 				}
 
-				skillid = event.skill.id;
 				if (whichboss==3 && ThirdBossActions[skillid]) {
 					// 屏蔽重复通知的技能
 					if (!notice) return;
