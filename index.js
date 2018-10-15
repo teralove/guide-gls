@@ -56,7 +56,7 @@ module.exports = function ccGuide(d) {
 		insidezone = false,
 		whichmode = 0,
 		whichboss = 0,
-		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, power = false, Level = 0, powerMsg;
+		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, power = false, Level = 0, powerMsg = '';
 
 	d.command.add('ddinfo', (arg) => {
 		d.command.message('模块开关: ' + `${enabled}`.clr('00FFFF'));
@@ -133,6 +133,7 @@ module.exports = function ccGuide(d) {
 				if (event.curHp == event.maxHp) {
 					power = false;
 					Level = 0;
+					powerMsg = '';
 				}
 
 				if (event.huntingZoneId == HuntingZn[0]) {
@@ -350,6 +351,7 @@ module.exports = function ccGuide(d) {
 		whichboss = 0;
 		power = false;
 		Level = 0;
+		powerMsg = '';
 	}
 
 	function sendMessage(msg) {
