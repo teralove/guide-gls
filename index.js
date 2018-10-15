@@ -26,22 +26,22 @@ const SecondBossActions = {
 	302: {msg: '↓进-捶地(击飞)'}
 };
 const ThirdBossActions = {
-	1118: {msg: '三连击(左-右-喷)'},
-	1143: {msg: '← 左后'},
-	1145: {msg: '← 左后'},
-	1146: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
-	1154: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
-	1144: {msg: '→ 右后'},
-	1147: {msg: '→ 右后'},
-	1148: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
-	1155: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
-	1139: {msg: '顺时针 (摆头) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
-	1150: {msg: '顺时针 (落地) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
-	1141: {msg: '逆时针 (摆头) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
-	1152: {msg: '逆时针 (落地) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
-	1161: {msg: '(后砸) (前砸)'},
-	1162: {msg: '(后砸) (前砸)'},
-	1300: {msg: '闪避!!'},
+	118: {msg: '三连击(左-右-喷)'},
+	143: {msg: '← 左后'},
+	145: {msg: '← 左后'},
+	146: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
+	154: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
+	144: {msg: '→ 右后'},
+	147: {msg: '→ 右后'},
+	148: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
+	155: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
+	139: {msg: '顺时针 (摆头) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
+	150: {msg: '顺时针 (落地) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
+	141: {msg: '逆时针 (摆头) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
+	152: {msg: '逆时针 (落地) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
+	161: {msg: '(后砸) (前砸)'},
+	162: {msg: '(后砸) (前砸)'},
+	300: {msg: '闪避!!'},
 	360: {msg: '爆炸!!爆炸!!'}
 };
 
@@ -56,7 +56,7 @@ module.exports = function ccGuide(d) {
 		insidezone = false,
 		whichmode = 0,
 		whichboss = 0,
-		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, power = false, Level = 0, powerMsg = '';
+		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, notice = true, power = false, Level = 0, powerMsg = '';
 
 	d.command.add('ddinfo', (arg) => {
 		d.command.message('模块开关: ' + `${enabled}`.clr('00FFFF'));
@@ -131,8 +131,9 @@ module.exports = function ccGuide(d) {
 				}
 
 				if (event.curHp == event.maxHp) {
-					power = false;
-					Level = 0;
+					notice = true,
+					power = false,
+					Level = 0,
 					powerMsg = '';
 				}
 
@@ -237,39 +238,48 @@ module.exports = function ccGuide(d) {
 
 				skillid = event.skill.id;
 				if (whichboss==3 && ThirdBossActions[skillid]) {
+					// 屏蔽重复通知的技能
+					if (!notice && (skillid===118||skillid===139||skillid===150||skillid===141||skillid===152)) {
+						notice = false;
+						setTimeout(function() { notice = true }, 4000);
+						return;
+					}
 					// 蓄电层数计数
-					if (whichmode==2 && skillid===1300) power = true, Level = 0, powerMsg = '';
+					if (whichmode==2) {
+						if (skillid===360) power = true, Level = 0, powerMsg = ''; // 放电 重新充能
+						if (skillid===300) power = true, Level = 0, powerMsg = ''; // 觉醒 开始充能
+					}
 					if (power && (
-						skillid===1118||
-						skillid===1215||
+						skillid===118||
+						skillid===215||
 
-						skillid===1143||
-						skillid===1145||
+						skillid===143||
+						skillid===145||
 
-						skillid===1146||
-						skillid===1154||
+						skillid===146||
+						skillid===154||
 
-						skillid===1144||
-						skillid===1147||
+						skillid===144||
+						skillid===147||
 
-						skillid===1148||
-						skillid===1155||
+						skillid===148||
+						skillid===155||
 
-						skillid===1161||
-						skillid===1162)
+						skillid===161||
+						skillid===162)
 					) {
 						Level++;
 						powerMsg = '蓄电(' + Level + ') ';
 					}
 
 					// 3王 左右扩散初始位置标记
-					if (skillid === 1146 || skillid === 1154 || skillid === 1148 || skillid === 1155) {
+					if (skillid === 146 || skillid === 154 || skillid === 148 || skillid === 155) {
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 8000);
 					}
 
 					// 3王 飞天半屏攻击
-					if (skillid === 1139 || skillid === 1150 || skillid === 1141 || skillid === 1152) {
-						//垂直对称轴
+					if (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152) {
+						// 垂直对称轴
 						Spawnitem(603, 0, 25);
 						Spawnitem(603, 0, 50);
 						Spawnitem(603, 0, 75);
@@ -311,7 +321,7 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 180, 450);
 						Spawnitem(603, 180, 475);
 						Spawnitem(603, 180, 500);
-						//光柱+告示牌
+						// 光柱+告示牌
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 5000);
 					}
 
@@ -345,12 +355,13 @@ module.exports = function ccGuide(d) {
 	}
 
 	function reset() {
-		insidemap = false;
-		insidezone = false;
-		whichmode = 0;
-		whichboss = 0;
-		power = false;
-		Level = 0;
+		insidemap = false,
+		insidezone = false,
+		whichmode = 0,
+		whichboss = 0,
+		notice = true,
+		power = false,
+		Level = 0,
 		powerMsg = '';
 	}
 
