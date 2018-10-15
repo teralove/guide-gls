@@ -238,7 +238,7 @@ module.exports = function ccGuide(d) {
 				skillid = event.skill.id;
 				if (whichboss==3 && ThirdBossActions[skillid]) {
 					// 蓄电层数计数
-					if (whichmode==2 && skillid===1300) power = true, Level = 0;
+					if (whichmode==2 && skillid===1300) power = true, Level = 0, powerMsg = '';
 					if (power && (
 						skillid===1118||
 						skillid===1215||
