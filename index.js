@@ -1,10 +1,11 @@
 String.prototype.clr = function (hexColor) { return `<font color="#${hexColor}">${this}</font>` };
-const config = require('./config.json');
 const Vec3 = require('tera-vec3');
+
 const mapID = [9782, 9982];
 const HuntingZn = [782, 982];
 const BossID = [1000, 2000, 3000];
 
+const config = require('./config.json');
 const FirstBossActions = {
 	106: {msg: '重击'},
 	107: {msg: '后喷(击退)'},
@@ -25,22 +26,22 @@ const SecondBossActions = {
 	302: {msg: '↓进-捶地(击飞)'}
 };
 const ThirdBossActions = {
-	118: {msg: '三连击(左-右-喷)'},
-	143: {msg: '↑左(远) 左后'},
-	145: {msg: '↑左(远) 左后'},
-	146: {msg: '↑左(远) 左后 (左后扩散)', sign_degrees: 330, sign_distance: 320},
-	154: {msg: '↑左(远) 左后 (左后扩散)', sign_degrees: 330, sign_distance: 320},
-	144: {msg: '↓右(近) 右后'},
-	147: {msg: '↓右(近) 右后'},
-	148: {msg: '↓右(近) 右后 (右后扩散)', sign_degrees: 30, sign_distance: 320},
-	155: {msg: '↓右(近) 右后 (右后扩散)', sign_degrees: 30, sign_distance: 320},
-	139: {msg: '←顺时针139 (摆头抬脚 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
-	150: {msg: '←顺时针150 (落地直接 王打右边)', sign_degrees: 270, sign_distance: 200}, //151
-	141: {msg: '逆时针141→ (摆头抬脚 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
-	152: {msg: '逆时针152→ (落地直接 王打左边)', sign_degrees: 90, sign_distance: 200}, //153
-	161: {msg: '(后砸) (前砸)'},
-	162: {msg: '(后砸) (前砸)'},
-	300: {msg: '闪避!!'},
+	1118: {msg: '三连击(左-右-喷)'},
+	1143: {msg: '← 左后'},
+	1145: {msg: '← 左后'},
+	1146: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
+	1154: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
+	1144: {msg: '→ 右后'},
+	1147: {msg: '→ 右后'},
+	1148: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
+	1155: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
+	1139: {msg: '顺时针 (摆头) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
+	1150: {msg: '顺时针 (落地) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
+	1141: {msg: '逆时针 (摆头) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
+	1152: {msg: '逆时针 (落地) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
+	1161: {msg: '(后砸) (前砸)'},
+	1162: {msg: '(后砸) (前砸)'},
+	1300: {msg: '闪避!!'},
 	360: {msg: '爆炸!!爆炸!!'}
 };
 
@@ -55,7 +56,7 @@ module.exports = function ccGuide(d) {
 		insidezone = false,
 		whichmode = 0,
 		whichboss = 0,
-		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, warned = true, power = false, powerNum = 0;
+		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, power = false, Level = 0, powerMsg;
 
 	d.command.add('ddinfo', (arg) => {
 		d.command.message('模块开关: ' + `${enabled}`.clr('00FFFF'));
@@ -119,6 +120,7 @@ module.exports = function ccGuide(d) {
 			hook('S_BOSS_GAGE_INFO', 3, sBossGageInfo);
 			hook('S_ACTION_STAGE', 8, sActionStage);
 			hook('S_DUNGEON_EVENT_MESSAGE', 2,sDungeonEventMessage);
+
 			function sBossGageInfo(event) {
 				if (!insidemap) return;
 
@@ -129,9 +131,8 @@ module.exports = function ccGuide(d) {
 				}
 
 				if (event.curHp == event.maxHp) {
-					warned = true;
 					power = false;
-					powerNum = 0;
+					Level = 0;
 				}
 
 				if (event.huntingZoneId == HuntingZn[0]) {
@@ -159,15 +160,15 @@ module.exports = function ccGuide(d) {
 				bossCurAngle = event.w;
 
 				if (whichboss==1 && FirstBossActions[skillid]) {
-					if (!isTank && skillid === 106) return; // 打手职业 不提示的技能
-					if ( isTank && skillid === 107) return; // 坦克职业 不提示的技能
+					if (!isTank && skillid === 106) return;
+					if ( isTank && skillid === 107) return;
 					sendMessage(FirstBossActions[skillid].msg);
 				}
+
 				if (whichboss==2 && SecondBossActions[skillid]) {
 					sendMessage(SecondBossActions[skillid].msg);
-
+					// 2王 内外圈
 					if (skillid === 114 || skillid === 301 || skillid === 302) {
-						// 2王 内外圈
 						Spawnitem(603, 20, 260);
 						Spawnitem(603, 40, 260);
 						Spawnitem(603, 60, 260);
@@ -187,9 +188,8 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 340, 260);
 						Spawnitem(603, 360, 260);
 					}
-
+					// 2王 前砸后砸 横向对称轴
 					if (skillid === 116) {
-						// 2王 前砸后砸 横向对称轴
 						Spawnitem(603, 90, 25);
 						Spawnitem(603, 90, 50);
 						Spawnitem(603, 90, 75);
@@ -233,41 +233,41 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 270, 500);
 					}
 				}
+
+				skillid = event.skill.id;
 				if (whichboss==3 && ThirdBossActions[skillid]) {
-					if (whichmode==2 && skillid==300) power = true;
+					// 蓄电层数计数
+					if (whichmode==2 && skillid===1300) power = true, Level = 0;
 					if (power && (
-						skillid==118||
-						skillid==215||
+						skillid===1118||
+						skillid===1215||
 
-						skillid==143||
-						skillid==145||
+						skillid===1143||
+						skillid===1145||
 
-						skillid==146||
-						skillid==154||
+						skillid===1146||
+						skillid===1154||
 
-						skillid==144||
-						skillid==147||
+						skillid===1144||
+						skillid===1147||
 
-						skillid==148||
-						skillid==155||
+						skillid===1148||
+						skillid===1155||
 
-						skillid==161||
-						skillid==162))
-					{
-						powerNum++;
-						setTimeout(sendMessage('蓄电 (' + powerNum + ')'), 1000);
+						skillid===1161||
+						skillid===1162)
+					) {
+						Level++;
+						powerMsg = '蓄电(' + Level + ') ';
 					}
-					if (skillid === 118) {
-						power = false; //关闭蓄电计数
-						setTimeout(function() { power = true;}, 4000); //等待4秒开启计数
-					}
-					if (powerNum>4) powerNum=0;
 
-					if (skillid === 146 || skillid === 154 || skillid === 148 || skillid === 155) { // 3王 左右扩散初始位置
+					// 3王 左右扩散初始位置标记
+					if (skillid === 1146 || skillid === 1154 || skillid === 1148 || skillid === 1155) {
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 8000);
 					}
 
-					if (warned && (skillid === 139 || skillid === 150 || skillid === 141 || skillid === 152)) { // 3王 飞天半屏攻击
+					// 3王 飞天半屏攻击
+					if (skillid === 1139 || skillid === 1150 || skillid === 1141 || skillid === 1152) {
 						//垂直对称轴
 						Spawnitem(603, 0, 25);
 						Spawnitem(603, 0, 50);
@@ -312,24 +312,9 @@ module.exports = function ccGuide(d) {
 						Spawnitem(603, 180, 500);
 						//光柱+告示牌
 						SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 5000);
-						warned = false; //关闭地面提示
-						setTimeout(function() { warned = true;}, 4000); //等待4秒开启提示
 					}
 
-					if (!isTank && skillid === 118) return; // 打手职业 不提示的技能
-					if ( isTank && (
-						skillid === 143 ||
-						skillid === 145 ||
-
-						skillid === 146 ||
-						skillid === 154 ||
-
-						skillid === 161 ||
-						skillid === 162)) return; // 坦克职业 不提示的技能
-					if (warned) {
-						sendMessage(ThirdBossActions[skillid].msg);
-					}
-
+					sendMessage(powerMsg + ThirdBossActions[skillid].msg);
 				}
 			}
 
@@ -363,9 +348,8 @@ module.exports = function ccGuide(d) {
 		insidezone = false;
 		whichmode = 0;
 		whichboss = 0;
-		warned = true;
 		power = false;
-		powerNum = 0;
+		Level = 0;
 	}
 
 	function sendMessage(msg) {
@@ -398,7 +382,7 @@ module.exports = function ccGuide(d) {
 		spawnx = bossCurLocation.x + radius * Math.cos(finalrad);
 		spawny = bossCurLocation.y + radius * Math.sin(finalrad);
 		pos = {x:spawnx, y:spawny};
-
+		// 花朵
 		d.toClient('S_SPAWN_COLLECTION', 4, {
 			gameId : uid0,
 			id : item,
@@ -408,17 +392,17 @@ module.exports = function ccGuide(d) {
 			unk1 : 0,
 			unk2 : 0
 		});
-
+		// 延时消除
 		setTimeout(Despawn, 5000, uid0)
 		uid0--;
 	}
-	//消除花朵
+	// 消除花朵
 	function Despawn(uid_arg0) {
 		d.toClient('S_DESPAWN_COLLECTION', 2, {
 			gameId : uid_arg0
 		});
 	}
-	//地面提示(光柱+告示牌)
+	// 地面提示(光柱+告示牌)
 	function SpawnThing(degrees, radius, times) { //偏移角度 半径距离 持续时间
 		let r = null, rads = null, finalrad = null, pos = null;
 
@@ -427,8 +411,8 @@ module.exports = function ccGuide(d) {
 		finalrad = r - rads;
 		bossCurLocation.x = bossCurLocation.x + radius * Math.cos(finalrad);
 		bossCurLocation.y = bossCurLocation.y + radius * Math.sin(finalrad);
-
-		d.toClient('S_SPAWN_BUILD_OBJECT', 2, { //告示牌
+		// 告示牌
+		d.toClient('S_SPAWN_BUILD_OBJECT', 2, {
 			gameId : uid1,
 			itemId : 1,
 			loc : bossCurLocation,
@@ -437,13 +421,11 @@ module.exports = function ccGuide(d) {
 			ownerName : '提示',
 			message : '提示区'
 		});
-
-		setTimeout(DespawnThing, times, uid1, uid2);
 		uid1--;
 
 		bossCurLocation.z = bossCurLocation.z - 100;
-
-		d.toClient('S_SPAWN_DROPITEM', 6, { //龙头光柱
+		// 龙头光柱
+		d.toClient('S_SPAWN_DROPITEM', 6, {
 			gameId: uid2,
 			loc: bossCurLocation,
 			item: 98260,
@@ -452,8 +434,10 @@ module.exports = function ccGuide(d) {
 			owners: [{playerId: uid2}]
 		});
 		uid2--;
+		// 延迟消除
+		setTimeout(DespawnThing, times, uid1, uid2);
 	}
-	//消除 光柱+告示牌
+	// 消除 光柱+告示牌
 	function DespawnThing(uid_arg1, uid_arg2) {
 		d.toClient('S_DESPAWN_BUILD_OBJECT', 2, {
 			gameId : uid_arg1,
