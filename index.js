@@ -239,10 +239,10 @@ module.exports = function ccGuide(d) {
 				skillid = event.skill.id;
 				if (whichboss==3 && ThirdBossActions[skillid]) {
 					// 屏蔽重复通知的技能
-					if (!notice && (skillid===118||skillid===139||skillid===150||skillid===141||skillid===152)) {
+					if (!notice) return;
+					if (notice && (skillid===118||skillid===139||skillid===150||skillid===141||skillid===152)) {
 						notice = false;
 						setTimeout(function() { notice = true }, 4000);
-						return;
 					}
 					// 蓄电层数计数
 					if (whichmode==2) {
