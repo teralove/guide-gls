@@ -421,7 +421,6 @@ module.exports = function ccGuide(d) {
 			ownerName : '提示',
 			message : '提示区'
 		});
-		uid1--;
 
 		bossCurLocation.z = bossCurLocation.z - 100;
 		// 龙头光柱
@@ -433,9 +432,10 @@ module.exports = function ccGuide(d) {
 			expiry: 6000,
 			owners: [{playerId: uid2}]
 		});
-		uid2--;
 		// 延迟消除
 		setTimeout(DespawnThing, times, uid1, uid2);
+		uid1--;
+		uid2--;
 	}
 	// 消除 光柱+告示牌
 	function DespawnThing(uid_arg1, uid_arg2) {
