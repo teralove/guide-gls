@@ -9,13 +9,13 @@ const config = require('./config.json');
 const FirstBossActions = {
 	106: {msg: '重击'},
 	107: {msg: '后喷(击退)'},
-	109: {msg: '滚石!!'},
-	110: {msg: '滚石!!'},
+	109: {msg: '滚石'},
+	110: {msg: '滚石'},
 	301: {msg: '食人花(眩晕)'},
 	309: {msg: '1朵花-鉴定!!'},
 	310: {msg: '2朵花-鉴定!!'},
-	116: {msg: '全屏'},
-	312: {msg: '金色花'}
+	116: {msg: '全屏攻击!!'},
+	312: {msg: '金色花!!'}
 };
 const SecondBossActions = {
 	105: {msg: '翻滚'},
@@ -27,14 +27,14 @@ const SecondBossActions = {
 };
 const ThirdBossActions = {
 	118: {msg: '三连击(左-右-喷)'},
-	143: {msg: '← 左后'},
-	145: {msg: '← 左后'},
-	146: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
-	154: {msg: '← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
-	144: {msg: '→ 右后'},
-	147: {msg: '→ 右后'},
-	148: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
-	155: {msg: '→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
+	143: {msg: '←←← 左后'},
+	145: {msg: '←←← 左后'},
+	146: {msg: '←←← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
+	154: {msg: '←←← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
+	144: {msg: '→→→ 右后'},
+	147: {msg: '→→→ 右后'},
+	148: {msg: '→→→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
+	155: {msg: '→→→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
 	139: {msg: '顺时针 (摆头) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
 	150: {msg: '顺时针 (落地) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
 	141: {msg: '逆时针 (摆头) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
@@ -268,7 +268,7 @@ module.exports = function ccGuide(d) {
 						skillid===162)
 					) {
 						Level++;
-						powerMsg = '蓄电(' + Level + ') ';
+						powerMsg = '<font color="#FF0000">(' + Level + '层)</font> ';
 					}
 
 					// 3王 左右扩散初始位置标记
