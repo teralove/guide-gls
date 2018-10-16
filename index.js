@@ -7,42 +7,42 @@ const BossID = [1000, 2000, 3000];
 
 const config = require('./config.json');
 const FirstBossActions = {
-	106: {msg: '重击'},
-	107: {msg: '后喷(击退)'},
-	109: {msg: '滚石'},
-	110: {msg: '滚石'},
-	301: {msg: '食人花(眩晕)'},
-	309: {msg: '1朵花-鉴定!!'},
-	310: {msg: '2朵花-鉴定!!'},
-	116: {msg: '全屏攻击!!'},
-	312: {msg: '金色花!!'}
+	106: {msg: 'Heavy'},
+	107: {msg: 'Post spray (repel)'},
+	109: {msg: 'Rolling Stone'},
+	110: {msg: 'Rolling Stone'},
+	301: {msg: 'Man eating flowers (dizziness)'},
+	309: {msg: '1 flower-identification!!'},
+	310: {msg: '2 flowers - identification!!'},
+	116: {msg: 'Full screen attack!!'},
+	312: {msg: 'Golden flower!!'}
 };
 const SecondBossActions = {
-	105: {msg: '翻滚'},
-	113: {msg: '双手(眩晕)'},
-	114: {msg: '三连地板(靠近)'},
-	116: {msg: '(前砸) (后砸)'},
-	301: {msg: '↑出-旋转(击退)'},
-	302: {msg: '↓进-捶地(击飞)'}
+	105: {msg: 'Tumble'},
+	113: {msg: 'Hands (dizziness)'},
+	114: {msg: 'Three floors (near)'},
+	116: {msg: '(Front) (After)'},
+	301: {msg: '↑ Out-rotation (repulsive)'},
+	302: {msg: '↓ Into the ground (flying)'}
 };
 const ThirdBossActions = {
-	118: {msg: '三连击(左-右-喷)'},
-	143: {msg: '←←← 左后'},
-	145: {msg: '←←← 左后'},
-	146: {msg: '←←← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
-	154: {msg: '←←← 左后 (扩散)', sign_degrees: 330, sign_distance: 320},
-	144: {msg: '→→→ 右后'},
-	147: {msg: '→→→ 右后'},
-	148: {msg: '→→→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
-	155: {msg: '→→→ 右后 (扩散)', sign_degrees: 30, sign_distance: 320},
-	139: {msg: '顺时针 (摆头) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
-	150: {msg: '顺时针 (落地) 王打右边', sign_degrees: 270, sign_distance: 200}, //151
-	141: {msg: '逆时针 (摆头) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
-	152: {msg: '逆时针 (落地) 王打左边', sign_degrees: 90, sign_distance: 200}, //153
-	161: {msg: '(后砸) (前砸)'},
-	162: {msg: '(后砸) (前砸)'},
-	300: {msg: '闪避!!'},
-	360: {msg: '爆炸!!爆炸!!'}
+	118: {msg: 'Three combos (left-right-spray)'},
+	143: {msg: '←←← Left Rear ←←←'},
+	145: {msg: '←←← Left Rear ←←←'},
+	146: {msg: '←←← Left Rear ←←← (diffusion)', sign_degrees: 330, sign_distance: 320},
+	154: {msg: '←←← Left Rear ←←← (diffusion)', sign_degrees: 330, sign_distance: 320},
+	144: {msg: '→→→ Right back →→→'},
+	147: {msg: '→→→ Right Rear →→→'},
+	148: {msg: '→→→ Right rear (diffusion) →→→', sign_degrees: 30, sign_distance: 320},
+	155: {msg: '→→→ Right rear (diffusion) →→→', sign_degrees: 30, sign_distance: 320},
+	139: {msg: 'clockwise (swinging head) king hitting right', sign_degrees: 270, sign_distance: 200}, //151
+	150: {msg: 'clockwise (landing) king hit right', sign_degrees: 270, sign_distance: 200}, //151
+	141: {msg: 'Counterclockwise (swinging head) King hit left', sign_degrees: 90, sign_distance: 200}, //153
+	152: {msg: 'Counterclockwise (landing) King hit left', sign_degrees: 90, sign_distance: 200}, //153
+	161: {msg: 'Before and after'},
+	162: {msg: 'Before and after'},
+	300: {msg: 'Dash away!!'},
+	360: {msg: 'Explosion!! Explosion!!'}
 };
 
 module.exports = function ccGuide(d) {
@@ -59,31 +59,31 @@ module.exports = function ccGuide(d) {
 		hooks = [], bossCurLocation, bossCurAngle, uid0 = 999999999, uid1 = 899999999, uid2 = 799999999, notice = true, power = false, Level = 0, powerMsg = '';
 
 	d.command.add('ddinfo', (arg) => {
-		d.command.message('模块开关: ' + `${enabled}`.clr('00FFFF'));
-		d.command.message('副本地图: ' + insidemap);
-		d.command.message('区域位置: ' + insidezone);
-		d.command.message('副本难度: ' + whichmode);
-		d.command.message('副本首领: ' + whichboss);
-		d.command.message('发送通知 ' + (sendToParty ? '真实组队'.clr('56B4E9') : '仅自己见'.clr('E69F00')));
-		d.command.message('职业分类 ' + (isTank ? '坦克'.clr('00FFFF') : '打手'.clr('FF0000')));
+		d.command.message('enabled: ' + `${enabled}`.clr('00FFFF'));
+		d.command.message('insidemap: ' + insidemap);
+		d.command.message('insidezone: ' + insidezone);
+		d.command.message('whichmode: ' + whichmode);
+		d.command.message('whichboss: ' + whichboss);
+		d.command.message('sendToParty ' + (sendToParty ? 'true'.clr('56B4E9') : 'false'.clr('E69F00')));
+		d.command.message('isTank ' + (isTank ? 'true'.clr('00FFFF') : 'false'.clr('FF0000')));
 		sendMessage('test');
 	})
 	d.command.add('ddg', (arg) => {
 		if (!arg) {
 			enabled = !enabled;
-			d.command.message('辅助提示 ' + (enabled ? '启用'.clr('56B4E9') : '禁用'.clr('E69F00')));
+			d.command.message('enabled: ' + (enabled ? 'true'.clr('56B4E9') : 'false'.clr('E69F00')));
 		} else {
 			switch (arg) {
 				case "party":
 					sendToParty = !sendToParty;
-					d.command.message('发送通知 ' + (sendToParty ? '组队'.clr('56B4E9') : '自己'.clr('E69F00')));
+					d.command.message('sendToParty ' + (sendToParty ? 'true'.clr('56B4E9') : 'false'.clr('E69F00')));
 					break;
 				case "proxy":
 					streamenabled = !streamenabled;
-					d.command.message('代理频道 ' + (streamenabled ? '启用'.clr('56B4E9') : '禁用'.clr('E69F00')));
+					d.command.message('streamEnabled ' + (streamenabled ? 'true'.clr('56B4E9') : 'false'.clr('E69F00')));
 					break;
 				default :
-					d.command.message('无效的参数!'.clr('FF0000'));
+					d.command.message('Invalid argument!'.clr('FF0000'));
 					break;
 			}
 		}
@@ -104,11 +104,11 @@ module.exports = function ccGuide(d) {
 	function sLoadTopo(event) {
 		if (event.zone === mapID[0]) {								
 			insidemap = true;
-			d.command.message('进入副本: ' + '里安的地下殿堂 '.clr('56B4E9') + '[下级]'.clr('E69F00'));
+			d.command.message('Welcome to ' + 'Lian\'s underground hall '.clr('56B4E9') + '[NM]'.clr('E69F00'));
 			load();
 		} else if (event.zone === mapID[1]) {
 			insidemap = true;
-			d.command.message('进入副本: ' + '里安的地下殿堂 '.clr('56B4E9') + '[上级]'.clr('00FFFF'));
+			d.command.message('Welcome to ' + 'Lian\'s underground hall '.clr('56B4E9') + '[HM]'.clr('00FFFF'));
 			load();
 		} else {
 			unload();
@@ -268,7 +268,7 @@ module.exports = function ccGuide(d) {
 						skillid===162)
 					) {
 						Level++;
-						powerMsg = '<font color="#FF0000">(' + Level + '层)</font> ';
+						powerMsg = '<font color="#FF0000">(' + Level + 'Floor)</font> ';
 					}
 
 					// 3王 左右扩散初始位置标记
@@ -430,8 +430,8 @@ module.exports = function ccGuide(d) {
 			loc : bossCurLocation,
 			w : r,
 			unk : 0,
-			ownerName : '提示',
-			message : '提示区'
+			ownerName : 'prompt',
+			message : 'Prompt area'
 		});
 
 		bossCurLocation.z = bossCurLocation.z - 100;
