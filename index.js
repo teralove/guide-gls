@@ -11,38 +11,38 @@ const FirstBossActions = {
 	107: {msg: 'Post spray (repel)'},
 	109: {msg: 'Rolling Stone'},
 	110: {msg: 'Rolling Stone'},
-	301: {msg: 'Man eating flowers (dizziness)'},
-	309: {msg: '1 flower-identification!!'},
-	310: {msg: '2 flowers - identification!!'},
+	301: {msg: 'Flower stuns'},
+	309: {msg: '1 flower'},
+	310: {msg: '2 flowers'},
 	116: {msg: 'Full screen attack!!'},
 	312: {msg: 'Golden flower!!'}
 };
 const SecondBossActions = {
-	105: {msg: 'Tumble'},
-	113: {msg: 'Hands (dizziness)'},
-	114: {msg: 'Three floors (near)'},
-	116: {msg: '(Front) (After)'},
-	301: {msg: '↑ Out-rotation (repulsive)'},
-	302: {msg: '↓ Into the ground (flying)'}
+	105: {msg: 'Spin'},
+	113: {msg: 'Stun'},
+	114: {msg: 'Get IN'},
+	116: {msg: 'Back then Front'},
+	301: {msg: '↓ Get OUT + dodge'},
+	302: {msg: '↑ Get IN + dodge'}
 };
 const ThirdBossActions = {
-	118: {msg: 'Three combos (left-right-spray)'},
-	143: {msg: '←←← Left Rear ←←←'},
-	145: {msg: '←←← Left Rear ←←←'},
-	146: {msg: '←←← Left Rear ←←← (diffusion)', sign_degrees: 330, sign_distance: 320},
-	154: {msg: '←←← Left Rear ←←← (diffusion)', sign_degrees: 330, sign_distance: 320},
-	144: {msg: '→→→ Right back →→→'},
-	147: {msg: '→→→ Right Rear →→→'},
-	148: {msg: '→→→ Right rear (diffusion) →→→', sign_degrees: 30, sign_distance: 320},
-	155: {msg: '→→→ Right rear (diffusion) →→→', sign_degrees: 30, sign_distance: 320},
-	139: {msg: 'clockwise (swinging head) king hitting right', sign_degrees: 270, sign_distance: 200}, //151
-	150: {msg: 'clockwise (landing) king hit right', sign_degrees: 270, sign_distance: 200}, //151
-	141: {msg: 'Counterclockwise (swinging head) King hit left', sign_degrees: 90, sign_distance: 200}, //153
-	152: {msg: 'Counterclockwise (landing) King hit left', sign_degrees: 90, sign_distance: 200}, //153
-	161: {msg: 'Before and after'},
-	162: {msg: 'Before and after'},
-	300: {msg: 'Dash away!!'},
-	360: {msg: 'Explosion!! Explosion!!'}
+	118: {msg: 'Front triple'},
+	143: {msg: '←← Left rear ←←'},
+	145: {msg: '←← Left rear ←←'},
+	146: {msg: '←← Left rear ←← (pulses)', sign_degrees: 330, sign_distance: 320},
+	154: {msg: '←← Left rear ←← (pulses)', sign_degrees: 330, sign_distance: 320},
+	144: {msg: '→→ Right back →→'},
+	147: {msg: '→→ Right rear →→'},
+	148: {msg: '→→ Right rear (pulses) →→', sign_degrees: 30, sign_distance: 320},
+	155: {msg: '→→ Right rear (pulses) →→', sign_degrees: 30, sign_distance: 320},
+	139: {msg: 'Left safe', sign_degrees: 270, sign_distance: 200}, //151 //clockwise (swinging head) king hitting right
+	150: {msg: 'Left safe!', sign_degrees: 270, sign_distance: 200}, //151 //clockwise (landing) king hit right
+	141: {msg: 'Right safe', sign_degrees: 90, sign_distance: 200}, //153 //Counterclockwise (swinging head) King hit left
+	152: {msg: 'Right safe!', sign_degrees: 90, sign_distance: 200}, //153 //Counterclockwise (landing) King hit left
+	161: {msg: 'Back and front'},
+	162: {msg: 'Back and front'},
+	300: {msg: 'Dodge!!'},
+	360: {msg: 'Explosion!!'}
 };
 
 module.exports = function ccGuide(d) {
@@ -104,11 +104,11 @@ module.exports = function ccGuide(d) {
 	function sLoadTopo(event) {
 		if (event.zone === mapID[0]) {								
 			insidemap = true;
-			d.command.message('Welcome to ' + 'Lian\'s underground hall '.clr('56B4E9') + '[NM]'.clr('E69F00'));
+			d.command.message('Welcome to ' + 'Grotto of Lost Souls '.clr('56B4E9') + '[NM]'.clr('E69F00'));
 			load();
 		} else if (event.zone === mapID[1]) {
 			insidemap = true;
-			d.command.message('Welcome to ' + 'Lian\'s underground hall '.clr('56B4E9') + '[HM]'.clr('00FFFF'));
+			d.command.message('Welcome to ' + 'Grotto of Lost Souls '.clr('56B4E9') + '[HM]'.clr('00FFFF'));
 			load();
 		} else {
 			unload();
@@ -268,7 +268,8 @@ module.exports = function ccGuide(d) {
 						skillid===162)
 					) {
 						Level++;
-						powerMsg = '<font color="#FF0000">(' + Level + 'Floor)</font> ';
+						//powerMsg = '<font color="#FF0000">(' + Level + ') </font> ';
+						powerMsg = '{' + Level + '} ';
 					}
 
 					// 3王 左右扩散初始位置标记
