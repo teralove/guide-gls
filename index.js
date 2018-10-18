@@ -35,14 +35,20 @@ const ThirdBossActions = {
 	147: {msg: '→→ Right rear →→'},
 	148: {msg: '→→ Right rear (pulses) →→', sign_degrees: 30, sign_distance: 320},
 	155: {msg: '→→ Right rear (pulses) →→', sign_degrees: 30, sign_distance: 320},
+	
 	139: {msg: 'Left safe', sign_degrees: 270, sign_distance: 200}, //151 //clockwise (swinging head) king hitting right
 	150: {msg: 'Left safe!', sign_degrees: 270, sign_distance: 200}, //151 //clockwise (landing) king hit right
 	141: {msg: 'Right safe', sign_degrees: 90, sign_distance: 200}, //153 //Counterclockwise (swinging head) King hit left
 	152: {msg: 'Right safe!', sign_degrees: 90, sign_distance: 200}, //153 //Counterclockwise (landing) King hit left
+	
 	161: {msg: 'Back and front'},
 	162: {msg: 'Back and front'},
+	213: {msg: 'Tail'},
+	215: {msg: 'Tail!!'},
+	
 	300: {msg: 'Dodge!!'},
-	360: {msg: 'Explosion!!'}
+	360: {msg: 'Explosion!!'},
+	399: {msg: 'Awakening 2'}
 };
 
 module.exports = function ccGuide(d) {
@@ -245,11 +251,17 @@ module.exports = function ccGuide(d) {
 					}
 					// 蓄电层数计数
 					if (whichmode==2) {
-						if (skillid===360) power = true, Level = 0, powerMsg = ''; // 放电 重新充能
-						if (skillid===300) power = true, Level = 0, powerMsg = ''; // 觉醒 开始充能
+						// 一次觉醒 开始充能计数
+						if (skillid===300) power = true, Level = 0, powerMsg = '';
+						// 放电爆炸 重置充能计数
+						if (skillid===360) Level = 0;
+						// 二次觉醒 开始充能计数
+						if (skillid===399) Level = 0;
 					}
 					if (power && (
 						skillid===118||
+
+						skillid===213||
 						skillid===215||
 
 						skillid===143||
