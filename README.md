@@ -1,10 +1,13 @@
-**(WIP) English version**
+# gls-guide
+Guide for Grotto of Lost Souls.
 
-# grotto-guide
-Calls out mechanics during the fight.
-
-## Usage
-### `ddg`
+## Commands
+### `gls`
 - Toggle off/on (Default on)
 
-Original module: [https://github.com/zc149352394/DD-Guide](https://github.com/zc149352394/DD-Guide)
+### `gls party`
+- Toggle sending messages to party (Default off)
+
+### `gls proxy`
+- Toggles Stream Mode (Default off)
+- Send messages to proxy channel instead of as notices
