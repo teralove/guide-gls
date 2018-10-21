@@ -8,45 +8,45 @@ const BossID = [1000, 2000, 3000];
 const config = require('./config.json');
 const FirstBossActions = {
 	106: {msg: 'Heavy'},
-	107: {msg: 'Post spray (repel)'},
-	109: {msg: 'Rolling Stone'},
-	110: {msg: 'Rolling Stone'},
+	107: {msg: 'Pushback'},
+	109: {msg: 'Rocks (Small)'},
+	110: {msg: 'Rocks (Large)'},
 	301: {msg: 'Flower stuns'},
 	309: {msg: '1 flower'},
 	310: {msg: '2 flowers'},
-	116: {msg: 'Full screen attack!!'},
+	116: {msg: 'Big AoE attack!!'},
 	312: {msg: 'Golden flower!!'}
 };
 const SecondBossActions = {
 	105: {msg: 'Spin'},
 	113: {msg: 'Stun'},
 	114: {msg: 'Get IN'},
-	116: {msg: 'Back then Front'},
+	116: {msg: 'Front then Back'},
 	301: {msg: '↓ Get OUT + dodge'},
 	302: {msg: '↑ Get IN + dodge'}
 };
 const ThirdBossActions = {
-	118: {msg: 'Front triple'},
+	118: {msg: 'Front triple'}, // aka Tank Buster
 	143: {msg: '←← Left rear ←←'},
 	145: {msg: '←← Left rear ←←'},
 	146: {msg: '←← Left rear ←← (pulses)', sign_degrees: 330, sign_distance: 320},
 	154: {msg: '←← Left rear ←← (pulses)', sign_degrees: 330, sign_distance: 320},
-	144: {msg: '→→ Right back →→'},
+	144: {msg: '→→ Right rear →→'},
 	147: {msg: '→→ Right rear →→'},
-	148: {msg: '→→ Right rear (pulses) →→', sign_degrees: 30, sign_distance: 320},
-	155: {msg: '→→ Right rear (pulses) →→', sign_degrees: 30, sign_distance: 320},
+	148: {msg: '→→ Right rear →→ (pulses)', sign_degrees: 30, sign_distance: 320},
+	155: {msg: '→→ Right rear →→ (pulses)', sign_degrees: 30, sign_distance: 320},
 	
 	139: {msg: 'Left safe', sign_degrees: 270, sign_distance: 200}, //151 //clockwise (swinging head) king hitting right
 	150: {msg: 'Left safe!', sign_degrees: 270, sign_distance: 200}, //151 //clockwise (landing) king hit right
 	141: {msg: 'Right safe', sign_degrees: 90, sign_distance: 200}, //153 //Counterclockwise (swinging head) King hit left
 	152: {msg: 'Right safe!', sign_degrees: 90, sign_distance: 200}, //153 //Counterclockwise (landing) King hit left
 	
-	161: {msg: 'Back and front'},
-	162: {msg: 'Back and front'},
+	161: {msg: 'Back then Front'},
+	162: {msg: 'Back then Front'},
 	213: {msg: 'Tail'},
 	215: {msg: 'Tail!!'},
 	
-	300: {msg: 'Dodge!!'},
+	300: {msg: 'Dodge!!'}, // Awakening 1
 	360: {msg: 'Explosion!!'},
 	399: {msg: 'Awakening 2'}
 };
@@ -74,7 +74,7 @@ module.exports = function ccGuide(d) {
 		d.command.message('isTank ' + (isTank ? 'true'.clr('00FFFF') : 'false'.clr('FF0000')));
 		sendMessage('test');
 	})
-	d.command.add('ddg', (arg) => {
+	d.command.add('gls', (arg) => {
 		if (!arg) {
 			enabled = !enabled;
 			d.command.message('enabled: ' + (enabled ? 'true'.clr('56B4E9') : 'false'.clr('E69F00')));
@@ -86,7 +86,7 @@ module.exports = function ccGuide(d) {
 					break;
 				case "proxy":
 					streamenabled = !streamenabled;
-					d.command.message('streamEnabled ' + (streamenabled ? 'true'.clr('56B4E9') : 'false'.clr('E69F00')));
+					d.command.message('streamenabled ' + (streamenabled ? 'true'.clr('56B4E9') : 'false'.clr('E69F00')));
 					break;
 				default :
 					d.command.message('Invalid argument!'.clr('FF0000'));
@@ -399,6 +399,7 @@ module.exports = function ccGuide(d) {
 	}
 	//地面提示(花朵)
 	function Spawnitem(item, degrees, radius) { //显示物品 偏移角度 半径距离
+		if (streamenabled) return;
 		let r = null, rads = null, finalrad = null, spawnx = null, spawny = null, pos = null;
 
 		r = bossCurAngle - Math.PI;
@@ -429,6 +430,7 @@ module.exports = function ccGuide(d) {
 	}
 	// 地面提示(光柱+告示牌)
 	function SpawnThing(degrees, radius, times) { //偏移角度 半径距离 持续时间
+		if (streamenabled) return;
 		let r = null, rads = null, finalrad = null, pos = null;
 
 		r = bossCurAngle - Math.PI;
