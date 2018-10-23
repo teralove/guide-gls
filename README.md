@@ -11,3 +11,4 @@ Guide for Grotto of Lost Souls.
 ### `gls proxy`
 - Toggles Stream Mode (Default off)
 - Send messages to proxy channel instead of as notices
+- Does not spawn signs or flowers
