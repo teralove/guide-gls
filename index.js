@@ -19,7 +19,7 @@ const FirstBossActions = {
 };
 const SecondBossActions = {
 	105: {msg: 'Spin'},
-	113: {msg: 'Stun'},
+	113: {msg: 'Stun inc'},
 	114: {msg: 'Get IN'},
 	116: {msg: 'Front then Back'},
 	301: {msg: '↓ Get OUT + dodge'},
@@ -46,9 +46,9 @@ const ThirdBossActions = {
 	213: {msg: 'Tail'},
 	215: {msg: 'Tail!!'},
 	
-	300: {msg: 'Dodge!!'}, // Awakening 1
+	300: {msg: 'Dodge!! (Awakening 1)'},
 	360: {msg: 'Explosion!!'},
-	399: {msg: 'Awakening 2'}
+	399: {msg: 'Dodge!! (Awakening 2)'}
 };
 
 module.exports = function GrottoOfLostSoulsGuide(d) {
