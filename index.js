@@ -51,7 +51,7 @@ const ThirdBossActions = {
 	399: {msg: 'Awakening 2'}
 };
 
-module.exports = function ccGuide(d) {
+module.exports = function GrottoOfLostSoulsGuide(d) {
 	let	enabled = config.enabled,
 		sendToParty = config.sendToParty,
 		streamenabled = config.streamenabled,
