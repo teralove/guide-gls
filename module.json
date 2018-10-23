@@ -1,7 +1,7 @@
 {
 	"disableAutoUpdate": false,
 	"options": {
-		"niceName": "DD-Guide"
+		"niceName": "GLS-Guide"
 	},
-	"servers": ["https://raw.githubusercontent.com/teralove/DD-Guide/master/"]
+	"servers": ["https://raw.githubusercontent.com/teralove/gls-guide/master/"]
 }
