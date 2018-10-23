@@ -2,8 +2,8 @@
 	"files": {
 		"LICENSE": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
 		"README.md": "5c185d6b4c74abe8a7ee3b574bab7934e747b8731902ffdcda3fc2cb9d9a7460",
-		"index.js": "59002a98a39c404bbe40f45435d9125228826f938b2941c90f748f2543f8b187",
-		"module.json": "7c94007410ab32e7a945310258220c7fa90e6cc44fb212503a61352bdac6376f"
+		"index.js": "adcac9fb43ef9dc4ad6638a0b581ae19122490e36036e1e431beed3e2fdcb5bc",
+		"module.json": "813a0fa09c2519049c8c70bf3bac39101e06afc30b282c90bb14d9911c45bff4"
 	},
 	"defs": {
 		"C_CHAT": 1,
