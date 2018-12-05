@@ -266,7 +266,7 @@ module.exports = function GrottoOfLostSoulsGuide(mod) {
 					if (power && [118, 143, 145, 146, 144, 147, 148, 154, 155, 161, 162, 213, 215].includes(skillid)) {
 						Level++;
 						//powerMsg = '<font color="#FF0000">(' + Level + ') </font> ';
-						powerMsg = `${Level}`;
+						powerMsg = `{` + Level + `} `;
 					}
 
 					if ([146, 148, 154, 155].includes(skillid)) SpawnThing(ThirdBossActions[skillid].sign_degrees, ThirdBossActions[skillid].sign_distance, 8000);
