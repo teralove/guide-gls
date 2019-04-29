@@ -114,7 +114,7 @@ module.exports = function GrottoOfLostSoulsGuide(mod) {
 		}
 	});
 
-	mod.hook('S_LOGIN', 10, sLogin)
+	mod.hook('S_LOGIN', 13, sLogin)
 	mod.hook('S_LOAD_TOPO', 3, sLoadTopo);
 
 	function sLogin(event) {
